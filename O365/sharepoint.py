@@ -70,7 +70,8 @@ class SharepointListColumn(ApiComponent):
 
 class SharepointListItem(ApiComponent):
     _endpoints = {'update_list_item': '/items/{item_id}/fields',
-                  'delete_list_item': '/items/{item_id}'}
+                  'delete_list_item': '/items/{item_id}',
+                  'download_list_item': '/items/{item_id}/driveItem/content'}
 
     def __init__(self, *, parent=None, con=None, **kwargs):
         """ A Sharepoint ListItem within a SharepointList
@@ -179,6 +180,11 @@ class SharepointListItem(ApiComponent):
         url = self.build_url(self._endpoints.get('delete_list_item').format(item_id=self.object_id))
         response = self.con.delete(url)
         return bool(response)
+    
+    def download(self):
+        url = self.build_url(self._endpoints.get('download_list_item').format(item_id=self.object_id))
+        response = self.con.get(url)
+        return response
 
 
 class SharepointList(ApiComponent):
